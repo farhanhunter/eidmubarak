@@ -4,7 +4,8 @@ Halaman ucapan **Selamat Hari Raya Idul Fitri 1447 H** berbasis HTML statis murn
 
 ## ✨ Fitur
 
-- Animasi bintang acak di langit malam (pure JS)
+- **Auto theme** — light mode pagi (jam 00–11), dark mode siang/malam (jam 12–23)
+- Animasi bintang acak di langit malam (pure JS, dark mode only)
 - Bulan sabit & bintang SVG dengan efek glow
 - 3 lentera gantung animasi (swing effect)
 - Teks Arab dengan font Amiri
@@ -39,16 +40,17 @@ Cukup buka `index.html` di browser — tidak perlu server.
 | Layer      | Detail                          |
 |------------|---------------------------------|
 | Markup     | HTML5                           |
-| Styling    | CSS3 (custom properties, keyframes) |
-| Scripting  | Vanilla JS (star field generator) |
+| Styling    | CSS3 (custom properties, keyframes, `[data-theme]`) |
+| Scripting  | Vanilla JS (star field generator, auto theme) |
 | Fonts      | Google Fonts — Amiri, Playfair Display, Cormorant Garamond |
 | Assets     | Inline SVG — zero external images |
 
 ## 📝 Last Update
 
-| Versi | Tanggal        | Perubahan                                      |
-|-------|----------------|------------------------------------------------|
-| 1.0.0 | 22 Maret 2026  | Initial release — Idul Fitri 1447H landing page |
+| Versi | Tanggal       | Perubahan                                      |
+|-------|---------------|------------------------------------------------|
+| 1.1.0 | 22 Maret 2026 | Auto light/dark theme berdasarkan jam lokal; stars hidden di light mode; CSS refactor ke `[data-theme]` variables |
+| 1.0.0 | 22 Maret 2026 | Initial release — Idul Fitri 1447H landing page |
 
 ---
 

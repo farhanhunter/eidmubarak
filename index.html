@@ -14,17 +14,36 @@
             --gold: #C9A84C;
             --gold-light: #E8C97A;
             --gold-pale: #F5E6BC;
-            --navy: #0A0E1A;
-            --navy-mid: #111827;
             --emerald: #0D3B2E;
             --cream: #FAF3E0;
         }
 
+        [data-theme="dark"] {
+            --page-bg: linear-gradient(180deg, #0A0E1A 0%, #111827 100%);
+            --stars-display: flex;
+            --card-overlay-start: rgba(13,59,46,0.5);
+            --card-overlay-end: rgba(10,14,26,0.7);
+            --text-primary: #FAF3E0;
+            --moon-crescent-fill: #0A0E1A;
+            --card-border: rgba(201,168,76,0.3);
+        }
+
+        [data-theme="light"] {
+            --page-bg: linear-gradient(180deg, #B8D4F0 0%, #FAF3E0 100%);
+            --stars-display: none;
+            --card-overlay-start: rgba(255,248,230,0.75);
+            --card-overlay-end: rgba(255,238,200,0.6);
+            --text-primary: #3D2200;
+            --moon-crescent-fill: #B8D4F0;
+            --card-border: rgba(139,90,0,0.3);
+        }
+
         html, body {
             min-height: 100%;
-            background: var(--navy);
+            background: var(--page-bg);
             font-family: 'Cormorant Garamond', serif;
             overflow-x: hidden;
+            transition: background 0.8s ease;
         }
 
         /* ── Stars ── */
@@ -33,6 +52,7 @@
             inset: 0;
             pointer-events: none;
             z-index: 0;
+            display: var(--stars-display, flex);
         }
         .star {
             position: absolute;
@@ -170,7 +190,7 @@
             position: relative;
             max-width: 560px;
             width: 100%;
-            border: 1px solid rgba(201,168,76,0.3);
+            border: 1px solid var(--card-border, rgba(201,168,76,0.3));
             border-radius: 2px;
             padding: 2rem 2.5rem;
             margin-bottom: 2.5rem;
@@ -182,7 +202,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(13,59,46,0.5) 0%, rgba(10,14,26,0.7) 100%);
+            background: linear-gradient(135deg, var(--card-overlay-start, rgba(13,59,46,0.5)) 0%, var(--card-overlay-end, rgba(10,14,26,0.7)) 100%);
             z-index: -1;
         }
         .corner-ornament {
@@ -196,7 +216,7 @@
         .corner-ornament.br { bottom: 8px; right: 8px; transform: scale(-1); }
         .msg-text {
             font-size: clamp(0.95rem, 2.2vw, 1.15rem);
-            color: var(--cream);
+            color: var(--text-primary, var(--cream));
             line-height: 1.9;
             font-weight: 300;
             text-align: center;
@@ -238,6 +258,9 @@
             from { opacity: 0; }
             to   { opacity: 1; }
         }
+
+        /* ── Moon crescent cutout ── */
+        #moon-crescent { fill: var(--moon-crescent-fill, #0A0E1A); }
 
         /* ── Responsive ── */
         @media (max-width: 500px) {
@@ -289,7 +312,7 @@
             </defs>
             <!-- Crescent via two circles -->
             <circle cx="60" cy="60" r="45" fill="url(#moonGrad)"/>
-            <circle cx="82" cy="52" r="40" fill="#0A0E1A"/>
+            <circle id="moon-crescent" cx="82" cy="52" r="40" fill="#0A0E1A"/>
             <!-- Small star -->
             <polygon points="96,28 97.8,33.4 103.5,33.4 99,36.6 100.8,42 96,38.8 91.2,42 93,36.6 88.5,33.4 94.2,33.4"
                      fill="#E8C97A" opacity="0.95"/>
@@ -426,6 +449,13 @@
 </div>
 
 <script>
+    // Apply time-based theme: 00:00–11:59 = light, 12:00–23:59 = dark
+    function applyTheme() {
+        const hour = new Date().getHours();
+        document.documentElement.setAttribute('data-theme', hour < 12 ? 'light' : 'dark');
+    }
+    applyTheme();
+
     // Generate random stars
     const layer = document.getElementById('stars');
     const count = 160;
