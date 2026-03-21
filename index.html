@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Minal Aidzin Wal Faidzin – Idul Fitri 1447 H</title>
+    <meta name="description" content="Selamat Hari Raya Idul Fitri 1447H — Mohon Maaf Lahir dan Batin" />
+    <meta property="og:title" content="Minal Aidzin Wal Faidzin 1447H" />
+    <meta property="og:description" content="Selamat Hari Raya Idul Fitri 1447H — Mohon Maaf Lahir dan Batin" />
+    <meta property="og:image" content="https://eidmubarak-gamma.vercel.app/og-preview.png" />
+    <meta property="og:type" content="website" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
@@ -123,8 +128,6 @@
             flex-direction: column;
             align-items: center;
             transform-origin: top center;
-            animation: swing var(--sw, 4s) ease-in-out infinite;
-            animation-delay: var(--sd, 0s);
         }
         @keyframes swing {
             0%, 100% { transform: rotate(-4deg); }
@@ -233,7 +236,6 @@
             color: var(--gold);
             letter-spacing: 0.25em;
             text-transform: uppercase;
-            opacity: 0.75;
             margin-bottom: 2.5rem;
             animation: fadeIn 1s ease forwards 1.6s;
         }
@@ -262,6 +264,47 @@
         /* ── Moon crescent cutout ── */
         #moon-crescent { fill: var(--moon-crescent-fill, #0A0E1A); }
 
+        /* ── Theme toggle ── */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 100;
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 50%;
+            border: 1px solid var(--card-border, rgba(201,168,76,0.3));
+            background: transparent;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.3s, background 0.3s;
+        }
+        .theme-toggle:hover { background: rgba(201,168,76,0.12); }
+
+        /* ── Share button ── */
+        .share-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.4rem;
+            border: 1px solid var(--card-border, rgba(201,168,76,0.3));
+            border-radius: 2px;
+            background: transparent;
+            color: var(--gold);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 1.8s;
+            transition: background 0.2s;
+        }
+        .share-btn:hover { background: rgba(201,168,76,0.1); }
+
         /* ── Responsive ── */
         @media (max-width: 500px) {
             .lanterns-row { gap: 1.5rem; }
@@ -270,6 +313,9 @@
     </style>
 </head>
 <body>
+
+<!-- Theme toggle -->
+<button class="theme-toggle" id="theme-toggle" aria-label="Toggle tema"></button>
 
 <!-- Star field -->
 <div class="stars-layer" id="stars"></div>
@@ -322,7 +368,7 @@
     <!-- Lanterns -->
     <div class="lanterns-row">
         <!-- Lantern 1 -->
-        <div class="lantern-wrap" style="--sw:5s;--sd:0s;">
+        <div class="lantern-wrap" style="animation:swing 5s ease-in-out 0s infinite;">
             <svg width="46" height="90" viewBox="0 0 46 90" xmlns="http://www.w3.org/2000/svg">
                 <line x1="23" y1="0" x2="23" y2="10" stroke="#C9A84C" stroke-width="1"/>
                 <rect x="16" y="10" width="14" height="5" rx="2" fill="#C9A84C" opacity="0.8"/>
@@ -339,7 +385,7 @@
             </svg>
         </div>
         <!-- Lantern 2 (bigger, center) -->
-        <div class="lantern-wrap" style="--sw:4.5s;--sd:0.7s;">
+        <div class="lantern-wrap" style="animation:swing 4.5s ease-in-out 0.7s infinite;">
             <svg width="56" height="110" viewBox="0 0 56 110" xmlns="http://www.w3.org/2000/svg">
                 <line x1="28" y1="0" x2="28" y2="12" stroke="#C9A84C" stroke-width="1.2"/>
                 <rect x="20" y="12" width="16" height="6" rx="2.5" fill="#C9A84C" opacity="0.9"/>
@@ -356,7 +402,7 @@
             </svg>
         </div>
         <!-- Lantern 3 -->
-        <div class="lantern-wrap" style="--sw:5s;--sd:1.4s;">
+        <div class="lantern-wrap" style="animation:swing 5s ease-in-out 1.4s infinite;">
             <svg width="46" height="90" viewBox="0 0 46 90" xmlns="http://www.w3.org/2000/svg">
                 <line x1="23" y1="0" x2="23" y2="10" stroke="#C9A84C" stroke-width="1"/>
                 <rect x="16" y="10" width="14" height="5" rx="2" fill="#C9A84C" opacity="0.8"/>
@@ -428,8 +474,17 @@
 
     <!-- Year badge -->
     <div class="year-badge" style="opacity:0;animation:fadeIn 1s ease forwards 1.6s;">
-        ١٤٤٧ هـ &nbsp;·&nbsp; 2025 M
+        ١٤٤٧ هـ &nbsp;·&nbsp; 2026 M
     </div>
+
+    <!-- Share button -->
+    <button class="share-btn" id="share-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        Bagikan
+    </button>
 
     <!-- Bottom geo band -->
     <div class="bottom-geo">
@@ -449,12 +504,43 @@
 </div>
 
 <script>
-    // Apply time-based theme: 00:00–11:59 = light, 12:00–23:59 = dark
+    // ── Theme (auto + manual override) ──
+    const toggleBtn = document.getElementById('theme-toggle');
+    let manualTheme = null;
+
     function applyTheme() {
-        const hour = new Date().getHours();
-        document.documentElement.setAttribute('data-theme', hour < 12 ? 'light' : 'dark');
+        const theme = manualTheme ?? (new Date().getHours() < 12 ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+        toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
     }
+
+    toggleBtn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        manualTheme = current === 'dark' ? 'light' : 'dark';
+        applyTheme();
+    });
+
     applyTheme();
+
+    // ── Share ──
+    document.getElementById('share-btn').addEventListener('click', async () => {
+        const shareData = {
+            title: 'Minal Aidzin Wal Faidzin 1447H',
+            text: 'Selamat Hari Raya Idul Fitri 1447H — Mohon Maaf Lahir dan Batin',
+            url: location.href,
+        };
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                await navigator.clipboard.writeText(location.href);
+                const btn = document.getElementById('share-btn');
+                const orig = btn.innerHTML;
+                btn.textContent = 'Link disalin! ✓';
+                setTimeout(() => { btn.innerHTML = orig; }, 2000);
+            }
+        } catch (_) { /* user cancelled */ }
+    });
 
     // Generate random stars
     const layer = document.getElementById('stars');
