@@ -21,6 +21,11 @@
             --gold-pale: #F5E6BC;
             --emerald: #0D3B2E;
             --cream: #FAF3E0;
+            /* particle defaults — overridden per-element via JS inline style */
+            --pleft: 50%;
+            --psize: 12px;
+            --pdur: 10s;
+            --pdel: 0s;
         }
 
         [data-theme="dark"] {
@@ -247,6 +252,17 @@
             animation: fadeIn 1s ease forwards 1.8s;
         }
 
+        /* ── Author credit ── */
+        .author {
+            margin-top: 1.2rem;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            color: var(--gold);
+            opacity: 0.45;
+            font-family: 'Cormorant Garamond', serif;
+            text-align: center;
+        }
+
         /* ── Keyframes ── */
         @keyframes fadeSlideDown {
             from { opacity: 0; transform: translateY(-24px); }
@@ -284,6 +300,46 @@
         }
         .theme-toggle:hover { background: rgba(201,168,76,0.12); }
 
+        /* ── Mute button ── */
+        .mute-btn {
+            position: fixed;
+            top: 1rem;
+            right: 4rem;
+            z-index: 100;
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 50%;
+            border: 1px solid var(--card-border, rgba(201,168,76,0.3));
+            background: transparent;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.3s, background 0.3s;
+        }
+        .mute-btn:hover { background: rgba(201,168,76,0.12); }
+
+        /* ── Falling particles ── */
+        @keyframes fall {
+            0%   { transform: translateY(-40px) rotate(0deg);   opacity: 0; }
+            8%   { opacity: 0.75; }
+            92%  { opacity: 0.75; }
+            100% { transform: translateY(105vh) rotate(420deg); opacity: 0; }
+        }
+        .particle {
+            position: fixed;
+            top: 0;
+            left: var(--pleft, 50%);
+            z-index: 0;
+            pointer-events: none;
+            font-size: var(--psize, 12px);
+            color: var(--gold);
+            opacity: 0;
+            animation: fall var(--pdur, 10s) linear var(--pdel, 0s) infinite;
+            will-change: transform;
+        }
+
         /* ── Share button ── */
         .share-btn {
             display: inline-flex;
@@ -314,7 +370,11 @@
 </head>
 <body>
 
-<!-- Theme toggle -->
+<!-- Audio -->
+<audio id="takbir-audio" src="takbir.mp3" loop preload="auto"></audio>
+
+<!-- Controls -->
+<button class="mute-btn" id="mute-btn" aria-label="Matikan suara"></button>
 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle tema"></button>
 
 <!-- Star field -->
@@ -501,6 +561,8 @@
         </svg>
     </div>
 
+    <p class="author">developed by farhanhunter</p>
+
 </div>
 
 <script>
@@ -521,6 +583,36 @@
     });
 
     applyTheme();
+
+    // ── Audio / mute ──
+    const audio   = document.getElementById('takbir-audio');
+    const muteBtn = document.getElementById('mute-btn');
+
+    function updateMuteBtn() {
+        muteBtn.textContent = audio.muted ? '🔇' : '🔊';
+        muteBtn.setAttribute('aria-label', audio.muted ? 'Nyalakan suara' : 'Matikan suara');
+    }
+
+    // Start muted — passes autoplay policy on all browsers
+    audio.muted = true;
+    audio.play().catch(() => {});
+    updateMuteBtn();
+
+    // Unmute on first interaction anywhere (unless user hits mute first)
+    function onFirstInteraction(e) {
+        if (e.target === muteBtn) return; // let mute button handle itself
+        audio.muted = false;
+        updateMuteBtn();
+        document.removeEventListener('pointerdown', onFirstInteraction);
+    }
+    document.addEventListener('pointerdown', onFirstInteraction);
+
+    muteBtn.addEventListener('click', () => {
+        audio.muted = !audio.muted;
+        if (audio.paused) audio.play().catch(() => {});
+        updateMuteBtn();
+        document.removeEventListener('pointerdown', onFirstInteraction);
+    });
 
     // ── Share ──
     document.getElementById('share-btn').addEventListener('click', async () => {
@@ -558,6 +650,20 @@
             `opacity:0`
         ].join(';');
         layer.appendChild(s);
+    }
+
+    // ── Falling particles (ketupat ◆ & bintang ✦) ──
+    const particleChars = ['◆', '✦', '◇', '✧'];
+    for (let i = 0; i < 20; i++) {
+        const p = document.createElement('span');
+        p.className = 'particle';
+        p.textContent = particleChars[i % particleChars.length];
+        const size = (Math.random() * 8 + 7).toFixed(1);   // 7–15px
+        const dur  = (Math.random() * 8 + 9).toFixed(1);   // 9–17s
+        const del  = (Math.random() * 14).toFixed(1);      // 0–14s offset
+        const left = (Math.random() * 96 + 1).toFixed(1);  // 1–97%
+        p.style.cssText = `--pleft:${left}%;--pdur:${dur}s;--pdel:-${del}s;--psize:${size}px;`;
+        document.body.appendChild(p);
     }
 </script>
 </body>

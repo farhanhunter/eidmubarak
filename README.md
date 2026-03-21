@@ -5,12 +5,15 @@ Halaman ucapan **Selamat Hari Raya Idul Fitri 1447 H** berbasis HTML statis murn
 ## ✨ Fitur
 
 - **Auto theme** — light mode pagi (jam 00–11), dark mode siang/malam (jam 12–23)
+- **Toggle theme manual** — tombol ☀️/🌙 di pojok kanan atas untuk override auto-theme
+- **Share button** — Web Share API di mobile, fallback clipboard copy di desktop
 - Animasi bintang acak di langit malam (pure JS, dark mode only)
 - Bulan sabit & bintang SVG dengan efek glow
 - 3 lentera gantung animasi (swing effect)
 - Teks Arab dengan font Amiri
 - Kartu pesan dengan ornamen sudut emas
 - Animasi masuk bertahap (staggered fade-in)
+- SEO & Open Graph meta tags (WhatsApp, Twitter, dsb)
 - Fully responsive — mobile friendly
 
 ## 🗂️ Struktur
@@ -41,7 +44,7 @@ Cukup buka `index.html` di browser — tidak perlu server.
 |------------|---------------------------------|
 | Markup     | HTML5                           |
 | Styling    | CSS3 (custom properties, keyframes, `[data-theme]`) |
-| Scripting  | Vanilla JS (star field generator, auto theme) |
+| Scripting  | Vanilla JS (star field, auto theme, Web Share API) |
 | Fonts      | Google Fonts — Amiri, Playfair Display, Cormorant Garamond |
 | Assets     | Inline SVG — zero external images |
 
@@ -49,6 +52,7 @@ Cukup buka `index.html` di browser — tidak perlu server.
 
 | Versi | Tanggal       | Perubahan                                      |
 |-------|---------------|------------------------------------------------|
+| 1.2.0 | 22 Maret 2026 | Toggle theme manual (☀️/🌙); share button (Web Share API + clipboard fallback); SEO meta description; Open Graph tags untuk preview WhatsApp/Twitter |
 | 1.1.0 | 22 Maret 2026 | Auto light/dark theme berdasarkan jam lokal; stars hidden di light mode; CSS refactor ke `[data-theme]` variables |
 | 1.0.0 | 22 Maret 2026 | Initial release — Idul Fitri 1447H landing page |
 
