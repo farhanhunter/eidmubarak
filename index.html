@@ -8,11 +8,11 @@
     <meta name="description" content="Selamat Hari Raya Idul Fitri 1447H — Mohon Maaf Lahir dan Batin" />
     <meta property="og:title" content="Minal Aidzin Wal Faidzin 1447H" />
     <meta property="og:description" content="Selamat Hari Raya Idul Fitri 1447H — Mohon Maaf Lahir dan Batin" />
-    <meta property="og:image" content="https://eidmubarak-gamma.vercel.app/og-preview.png" />
+    <meta property="og:url" content="https://eidmubarak-gamma.vercel.app" />
     <meta property="og:type" content="website" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=optional" rel="stylesheet" />
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -37,6 +37,8 @@
             --text-primary: #FAF3E0;
             --moon-crescent-fill: #0A0E1A;
             --card-border: rgba(201,168,76,0.3);
+            --gold-light: #E8C97A;
+            --gold-pale: #F5E6BC;
         }
 
         [data-theme="light"] {
@@ -47,6 +49,8 @@
             --text-primary: #3D2200;
             --moon-crescent-fill: #B8D4F0;
             --card-border: rgba(139,90,0,0.3);
+            --gold-light: #A0720A;
+            --gold-pale: #7A5500;
         }
 
         html, body {
@@ -65,12 +69,7 @@
             z-index: 0;
             display: var(--stars-display, flex);
         }
-        .star {
-            position: absolute;
-            border-radius: 50%;
-            background: #fff;
-            opacity: 0;
-        }
+
         @keyframes twinkle {
             0%, 100% { opacity: 0;   transform: scale(0.8); }
             50%       { opacity: 1;   transform: scale(1.2); }
@@ -344,18 +343,6 @@
             8%   { opacity: 0.75; }
             92%  { opacity: 0.75; }
             100% { transform: translateY(105vh) rotate(420deg); opacity: 0; }
-        }
-        .particle {
-            position: fixed;
-            top: 0;
-            left: var(--pleft, 50%);
-            z-index: 0;
-            pointer-events: none;
-            font-size: var(--psize, 12px);
-            color: var(--gold);
-            opacity: 0;
-            animation: fall var(--pdur, 10s) linear var(--pdel, 0s) infinite;
-            will-change: transform;
         }
 
         /* ── Share button ── */
