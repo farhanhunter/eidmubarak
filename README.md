@@ -4,6 +4,9 @@ Halaman ucapan **Selamat Hari Raya Idul Fitri 1447 H** berbasis HTML statis murn
 
 ## ✨ Fitur
 
+- **Countdown timer** — hitung mundur ke Idul Fitri 30 Mar 2026 00:00 WIB, auto-hide saat tercapai
+- **Personal greeting** — tambahkan `?untuk=Nama` di URL, muncul "Kepada Nama," di atas teks Arab
+- **Confetti burst** — 120 keping emas melayang saat halaman dibuka, auto-fade ~3 detik
 - **Auto theme** — light mode pagi (jam 00–11), dark mode siang/malam (jam 12–23)
 - **Toggle theme manual** — tombol ☀️/🌙 di pojok kanan atas untuk override auto-theme
 - **Audio takbir** — autoplay muted, unmute otomatis saat interaksi pertama; tombol 🔊/🔇
@@ -20,6 +23,18 @@ Halaman ucapan **Selamat Hari Raya Idul Fitri 1447 H** berbasis HTML statis murn
 - SEO & Open Graph meta tags (WhatsApp, Twitter, dsb)
 - Author credit — *developed by farhanhunter*
 - Fully responsive — mobile friendly
+
+## 🔗 Personal Greeting
+
+Kirim link personal ke keluarga/teman dengan menambahkan query param `?untuk=`:
+
+```
+https://eidmubarak-gamma.vercel.app?untuk=Ibu
+https://eidmubarak-gamma.vercel.app?untuk=Pak+Budi
+https://eidmubarak-gamma.vercel.app?untuk=Tim+Engineering
+```
+
+Nama akan muncul otomatis: *"Kepada Ibu,"*
 
 ## 🗂️ Struktur
 
@@ -50,22 +65,23 @@ Cukup buka `index.html` di browser — tidak perlu server.
 |------------|---------------------------------|
 | Markup     | HTML5                           |
 | Styling    | CSS3 (custom properties, keyframes, `[data-theme]`) |
-| Scripting  | Vanilla JS (star field, auto theme, Web Share API, particles) |
+| Scripting  | Vanilla JS (stars, particles, countdown, confetti canvas, Web Share API) |
 | Audio      | HTML5 `<audio>` — `takbir.mp3` (trimmed 5 min, 5.9MB) |
 | Fonts      | Google Fonts — Amiri, Playfair Display, Cormorant Garamond (`display=optional`) |
 | Assets     | Inline SVG + emoji favicon — zero external images |
 
 ## 📝 Last Update
 
-| Versi | Tanggal       | Perubahan                                      |
-|-------|---------------|------------------------------------------------|
-| 1.6.0 | 22 Maret 2026 | Polish: `og:url` ditambah, `og:image` dihapus (file tidak ada); `--gold-light` & `--gold-pale` jadi theme-aware (light mode lebih kontras); font `display=swap` → `display=optional`; hapus `.star` & `.particle` CSS yang tidak dipakai |
-| 1.5.0 | 22 Maret 2026 | Favicon inline SVG emoji 🌙 — fix 404 favicon.ico; social links LinkedIn & GitHub |
-| 1.4.0 | 22 Maret 2026 | CSS particle defaults di `:root`; author credit *developed by farhanhunter*; takbir.mp3 di-commit ke repo |
-| 1.3.0 | 22 Maret 2026 | Falling particles (◆✦◇✧) dengan negative delay; audio takbir + tombol mute; autoplay muted strategy |
-| 1.2.0 | 22 Maret 2026 | Toggle theme manual (☀️/🌙); share button (Web Share API + clipboard fallback); SEO meta description; Open Graph tags |
-| 1.1.0 | 22 Maret 2026 | Auto light/dark theme berdasarkan jam lokal; stars hidden di light mode; CSS refactor ke `[data-theme]` variables |
-| 1.0.0 | 22 Maret 2026 | Initial release — Idul Fitri 1447H landing page |
+| Versi | Tanggal       | Perubahan                                                                                                |
+|-------|---------------|----------------------------------------------------------------------------------------------------------|
+| 1.7.0 | 22 Maret 2026 | Countdown timer ke 25 Mar 2026 WIB; personal greeting `?untuk=Nama`; confetti burst 120 keping saat load |
+| 1.6.0 | 22 Maret 2026 | Polish: `og:url`, light mode contrast, font `display=optional`, hapus unused CSS                         |
+| 1.5.0 | 22 Maret 2026 | Favicon inline SVG emoji 🌙; social links LinkedIn & GitHub                                              |
+| 1.4.0 | 22 Maret 2026 | CSS particle defaults di `:root`; author credit *developed by farhanhunter*; takbir.mp3                  |
+| 1.3.0 | 22 Maret 2026 | Falling particles (◆✦◇✧); audio takbir + mute toggle                                                     |
+| 1.2.0 | 22 Maret 2026 | Toggle theme manual; share button; SEO & Open Graph tags                                                 |
+| 1.1.0 | 22 Maret 2026 | Auto light/dark theme; CSS `[data-theme]` refactor                                                       |
+| 1.0.0 | 22 Maret 2026 | Initial release                                                                                          |
 
 ---
 

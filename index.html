@@ -389,6 +389,78 @@
         }
         .share-btn:hover { background: rgba(201,168,76,0.1); }
 
+        /* ── Countdown ── */
+        .countdown-wrap {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeSlideUp 1.1s ease forwards 1.15s;
+        }
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+        }
+        .countdown-num {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1;
+            min-width: 2.5ch;
+            text-align: center;
+        }
+        .countdown-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+            opacity: 0.55;
+            text-transform: uppercase;
+        }
+        .countdown-sep {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            color: var(--gold);
+            opacity: 0.3;
+            align-self: flex-start;
+            padding-top: 0.1rem;
+            line-height: 1;
+        }
+        /*noinspection CssUnusedSymbol*/
+        .countdown-done {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1rem, 3vw, 1.4rem);
+            font-style: italic;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 1.15s;
+        }
+
+        /* ── Personal greeting ── */
+        .personal-greeting {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            color: var(--gold-light);
+            letter-spacing: 0.06em;
+            text-align: center;
+            margin-bottom: 0.6rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        /* ── Confetti canvas ── */
+        #confetti-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 999;
+        }
+
         /* ── Responsive ── */
         @media (max-width: 500px) {
             .lanterns-row { gap: 1.5rem; }
@@ -516,6 +588,32 @@
         <span></span>
     </div>
 
+    <!-- Personal greeting -->
+    <div class="personal-greeting" id="personal-greeting" style="display:none;"></div>
+
+    <!-- Countdown -->
+    <div class="countdown-wrap" id="countdown-wrap">
+        <div class="countdown-item">
+            <span class="countdown-num" id="cd-days">00</span>
+            <span class="countdown-label">Hari</span>
+        </div>
+        <span class="countdown-sep">·</span>
+        <div class="countdown-item">
+            <span class="countdown-num" id="cd-hours">00</span>
+            <span class="countdown-label">Jam</span>
+        </div>
+        <span class="countdown-sep">·</span>
+        <div class="countdown-item">
+            <span class="countdown-num" id="cd-mins">00</span>
+            <span class="countdown-label">Menit</span>
+        </div>
+        <span class="countdown-sep">·</span>
+        <div class="countdown-item">
+            <span class="countdown-num" id="cd-secs">00</span>
+            <span class="countdown-label">Detik</span>
+        </div>
+    </div>
+
     <!-- Main text -->
     <div class="text-block">
         <div class="arabic-text">مِنَ الْعَائِدِيْنَ وَالْفَائِزِيْنَ</div>
@@ -608,47 +706,37 @@
 </div>
 
 <script>
-    // ── Theme (auto + manual override) ──
+    // ── Theme ──
     const toggleBtn = document.getElementById('theme-toggle');
     let manualTheme = null;
-
     function applyTheme() {
         const theme = manualTheme ?? (new Date().getHours() < 12 ? 'light' : 'dark');
         document.documentElement.setAttribute('data-theme', theme);
         toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
     }
-
     toggleBtn.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme');
-        manualTheme = current === 'dark' ? 'light' : 'dark';
+        manualTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         applyTheme();
     });
-
     applyTheme();
 
-    // ── Audio / mute ──
+    // ── Audio ──
     const audio   = document.getElementById('takbir-audio');
     const muteBtn = document.getElementById('mute-btn');
-
     function updateMuteBtn() {
         muteBtn.textContent = audio.muted ? '🔇' : '🔊';
         muteBtn.setAttribute('aria-label', audio.muted ? 'Nyalakan suara' : 'Matikan suara');
     }
-
-    // Start muted — passes autoplay policy on all browsers
     audio.muted = true;
     audio.play().catch(() => {});
     updateMuteBtn();
-
-    // Unmute on first interaction anywhere (unless user hits mute first)
     function onFirstInteraction(e) {
-        if (e.target === muteBtn) return; // let mute button handle itself
+        if (e.target === muteBtn) return;
         audio.muted = false;
         updateMuteBtn();
         document.removeEventListener('pointerdown', onFirstInteraction);
     }
     document.addEventListener('pointerdown', onFirstInteraction);
-
     muteBtn.addEventListener('click', () => {
         audio.muted = !audio.muted;
         if (audio.paused) audio.play().catch(() => {});
@@ -658,14 +746,13 @@
 
     // ── Share ──
     document.getElementById('share-btn').addEventListener('click', async () => {
-        const shareData = {
-            title: 'Minal Aidzin Wal Faidzin 1447H',
-            text: 'Selamat Hari Raya Idul Fitri 1447H — Mohon Maaf Lahir dan Batin',
-            url: location.href,
-        };
         try {
             if (navigator.share) {
-                await navigator.share(shareData);
+                await navigator.share({
+                    title: 'Minal Aidzin Wal Faidzin 1447H',
+                    text: 'Selamat Hari Raya Idul Fitri 1447H — Mohon Maaf Lahir dan Batin',
+                    url: location.href,
+                });
             } else {
                 await navigator.clipboard.writeText(location.href);
                 const btn = document.getElementById('share-btn');
@@ -673,40 +760,117 @@
                 btn.textContent = 'Link disalin! ✓';
                 setTimeout(() => { btn.innerHTML = orig; }, 2000);
             }
-        } catch (_) { /* user cancelled */ }
+        } catch (_) {}
     });
 
-    // Generate random stars
+    // ── Personal greeting (?untuk=Nama) ──
+    const params = new URLSearchParams(location.search);
+    const untuk  = params.get('untuk');
+    if (untuk) {
+        const el = document.getElementById('personal-greeting');
+        el.textContent = `Kepada ${decodeURIComponent(untuk)},`;
+        el.style.display = 'block';
+    }
+
+    // ── Countdown (target: 25 Maret 2026 00:00 WIB = UTC+7) ──
+    const TARGET = new Date('2026-03-25T00:00:00+07:00').getTime();
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function tickCountdown() {
+        const diff = TARGET - Date.now();
+        if (diff <= 0) {
+            const wrap = document.getElementById('countdown-wrap');
+            wrap.innerHTML = '<p class="countdown-done">✦ Selamat Hari Raya! ✦</p>';
+            wrap.style.opacity = '1';
+            launchConfetti(); // trigger ulang
+            clearInterval(cdInterval);
+            return;
+        }
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        document.getElementById('cd-days').textContent  = pad(d);
+        document.getElementById('cd-hours').textContent = pad(h);
+        document.getElementById('cd-mins').textContent  = pad(m);
+        document.getElementById('cd-secs').textContent  = pad(s);
+    }
+    tickCountdown();
+    const cdInterval = setInterval(tickCountdown, 1000);
+
+    // ── Stars ──
     const layer = document.getElementById('stars');
-    const count = 160;
-    for (let i = 0; i < count; i++) {
-        const s = document.createElement('div');
+    for (let i = 0; i < 160; i++) {
+        const s    = document.createElement('div');
         s.className = 'star';
         const size = Math.random() * 2.2 + 0.6;
         const dur  = (Math.random() * 4 + 2).toFixed(1);
         const del  = (Math.random() * 5).toFixed(1);
-        s.style.cssText = [
-            `width:${size}px`, `height:${size}px`,
-            `top:${Math.random()*100}%`, `left:${Math.random()*100}%`,
-            `animation:twinkle ${dur}s ease-in-out ${del}s infinite`,
-            `opacity:0`
-        ].join(';');
+        s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation:twinkle ${dur}s ease-in-out ${del}s infinite;opacity:0`;
         layer.appendChild(s);
     }
 
-    // ── Falling particles (ketupat ◆ & bintang ✦) ──
+    // ── Particles ──
     const particleChars = ['◆', '✦', '◇', '✧'];
     for (let i = 0; i < 20; i++) {
-        const p = document.createElement('span');
+        const p    = document.createElement('span');
         p.className = 'particle';
         p.textContent = particleChars[i % particleChars.length];
-        const size = (Math.random() * 8 + 7).toFixed(1);   // 7–15px
-        const dur  = (Math.random() * 8 + 9).toFixed(1);   // 9–17s
-        const del  = (Math.random() * 14).toFixed(1);      // 0–14s offset
-        const left = (Math.random() * 96 + 1).toFixed(1);  // 1–97%
+        const size = (Math.random() * 8 + 7).toFixed(1);
+        const dur  = (Math.random() * 8 + 9).toFixed(1);
+        const del  = (Math.random() * 14).toFixed(1);
+        const left = (Math.random() * 96 + 1).toFixed(1);
         p.style.cssText = `--pleft:${left}%;--pdur:${dur}s;--pdel:-${del}s;--psize:${size}px;`;
         document.body.appendChild(p);
     }
+
+    // ── Confetti ──
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const confettiCtx    = confettiCanvas.getContext('2d');
+    const CONFETTI_COLORS = ['#C9A84C','#E8C97A','#F5E6BC','#fff','#0D9E75','#B8D4F0'];
+    let CW = confettiCanvas.width  = window.innerWidth;
+    let CH = confettiCanvas.height = window.innerHeight;
+    window.addEventListener('resize', () => {
+        CW = confettiCanvas.width  = window.innerWidth;
+        CH = confettiCanvas.height = window.innerHeight;
+    });
+
+    function launchConfetti() {
+        const pieces = [];
+        for (let i = 0; i < 120; i++) {
+            pieces.push({
+                x:     Math.random() * CW,
+                y:     Math.random() * -CH,
+                w:     Math.random() * 6 + 6,
+                h:     Math.random() * 4 + 3,
+                color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+                rot:   Math.random() * Math.PI * 2,
+                vx:    Math.random() * 3 - 1.5,
+                vy:    Math.random() * 3 + 2,
+                vr:    Math.random() * 0.12 - 0.06,
+                alpha: 1,
+            });
+        }
+        let frame = 0;
+        function draw() {
+            confettiCtx.clearRect(0, 0, CW, CH);
+            pieces.forEach(p => {
+                p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+                if (frame > 90) p.alpha = Math.max(0, p.alpha - 0.008);
+                confettiCtx.save();
+                confettiCtx.globalAlpha = p.alpha;
+                confettiCtx.translate(p.x, p.y);
+                confettiCtx.rotate(p.rot);
+                confettiCtx.fillStyle = p.color;
+                confettiCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                confettiCtx.restore();
+            });
+            frame++;
+            if (frame < 220) requestAnimationFrame(draw);
+            else confettiCtx.clearRect(0, 0, CW, CH);
+        }
+        draw();
+    }
+    launchConfetti(); // on load
 </script>
 </body>
 </html>
